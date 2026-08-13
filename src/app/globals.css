@@ -1,87 +1,766 @@
+/* =========================================================
+   SINGLISH FPL 26/27
+   CSS-ONLY VISUAL REDESIGN
+   ========================================================= */
+
 :root {
-  color-scheme: light dark;
-  --border: #d9d9d9;
-  --muted: #6b6b6b;
-  --gold: #caa100;
-  --silver: #8c8c8c;
-  --bronze: #a4622f;
+  --bg: #07050f;
+  --bg-soft: #0d091b;
+  --panel: #100b20;
+  --panel-light: #15102a;
+
+  --purple: #7028ff;
+  --purple-light: #914cff;
+  --green: #8cff00;
+  --green-dark: #4e9900;
+
+  --red: #f5255c;
+  --blue: #3d8dff;
+
+  --white: #f5f3f8;
+  --text: #d5d0df;
+  --muted: #858092;
+
+  --border: rgba(139, 76, 255, 0.28);
+  --border-soft: rgba(255,255,255,0.08);
+
+  --radius: 14px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --border: #3a3a3a;
-    --muted: #a0a0a0;
-  }
-}
+
+/* =========================================================
+   RESET
+   ========================================================= */
 
 * {
   box-sizing: border-box;
 }
 
+html {
+  background: var(--bg);
+}
+
 body {
   margin: 0;
-  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-  padding: 2rem;
-  max-width: 960px;
-  margin-inline: auto;
+  min-height: 100vh;
+
+  color: var(--white);
+
+  font-family:
+    Inter,
+    "Segoe UI",
+    Arial,
+    sans-serif;
+
+  background:
+    radial-gradient(
+      ellipse at 50% -20%,
+      rgba(112, 40, 255, 0.28),
+      transparent 48%
+    ),
+    radial-gradient(
+      ellipse at 100% 60%,
+      rgba(112, 40, 255, 0.08),
+      transparent 35%
+    ),
+    radial-gradient(
+      ellipse at 0% 80%,
+      rgba(140, 255, 0, 0.035),
+      transparent 30%
+    ),
+    #07050f;
+
+  overflow-x: hidden;
 }
+
+
+/* =========================================================
+   SUBTLE BACKGROUND GRID
+   ========================================================= */
+
+body::before {
+  content: "";
+
+  position: fixed;
+  inset: 0;
+
+  pointer-events: none;
+
+  background-image:
+    linear-gradient(
+      rgba(255,255,255,0.018) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255,255,255,0.018) 1px,
+      transparent 1px
+    );
+
+  background-size: 45px 45px;
+
+  mask-image:
+    linear-gradient(
+      to bottom,
+      black 0%,
+      transparent 85%
+    );
+
+  z-index: -1;
+}
+
+
+/* =========================================================
+   MAIN PAGE WIDTH
+   ========================================================= */
+
+body > div,
+main,
+.container {
+  width: min(1180px, calc(100% - 48px));
+  margin: 0 auto;
+
+  padding-top: 58px;
+  padding-bottom: 90px;
+}
+
+
+/* =========================================================
+   MAIN TITLE
+   ========================================================= */
 
 h1 {
-  font-size: 1.5rem;
-  margin-bottom: 0.25rem;
+  position: relative;
+
+  margin: 0;
+
+  color: var(--white);
+
+  font-size: clamp(38px, 5vw, 62px);
+  font-weight: 950;
+
+  line-height: 0.95;
+  letter-spacing: -3px;
+
+  text-transform: uppercase;
+
+  text-shadow:
+    0 0 30px rgba(255,255,255,0.06);
 }
 
-.subtitle {
+
+/* green slash underneath title */
+
+h1::after {
+  content: "";
+
+  display: block;
+
+  width: 115px;
+  height: 6px;
+
+  margin-top: 17px;
+
+  background: var(--green);
+
+  transform: skewX(-25deg);
+
+  box-shadow:
+    0 0 12px rgba(140,255,0,0.45);
+}
+
+
+/* =========================================================
+   INTRO TEXT
+   ========================================================= */
+
+h1 + p {
+  margin: 20px 0 55px;
+
+  max-width: 850px;
+
   color: var(--muted);
-  margin-top: 0;
-  margin-bottom: 2rem;
+
+  font-size: 15px;
+  line-height: 1.6;
 }
 
-section {
-  margin-bottom: 2.5rem;
-}
+
+/* =========================================================
+   SECTION HEADERS
+   ========================================================= */
 
 h2 {
-  font-size: 1.1rem;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 0.5rem;
+  position: relative;
+
+  margin: 48px 0 0;
+
+  padding: 17px 20px;
+
+  color: var(--white);
+
+  font-size: 19px;
+  font-weight: 900;
+
+  letter-spacing: -0.3px;
+
+  text-transform: uppercase;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(112,40,255,0.13),
+      rgba(112,40,255,0.035),
+      transparent
+    );
+
+  border-left: 4px solid var(--green);
+
+  border-top:
+    1px solid rgba(112,40,255,0.2);
+
+  border-right:
+    1px solid rgba(112,40,255,0.12);
+
+  border-bottom:
+    1px solid rgba(112,40,255,0.2);
+
+  box-shadow:
+    inset 0 0 30px rgba(112,40,255,0.025);
 }
+
+
+/* little green accent */
+
+h2::before {
+  content: "";
+
+  position: absolute;
+
+  left: -4px;
+  top: 0;
+
+  width: 4px;
+  height: 50%;
+
+  background: #b7ff4a;
+}
+
+
+/* =========================================================
+   SECTION CONTENT / EMPTY STATES
+   ========================================================= */
+
+h2 + p {
+  position: relative;
+
+  margin: 0;
+
+  min-height: 110px;
+
+  padding: 30px;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--muted);
+
+  font-size: 15px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(16,11,32,0.96),
+      rgba(9,7,18,0.96)
+    );
+
+  border-left:
+    1px solid var(--border);
+
+  border-right:
+    1px solid var(--border);
+
+  border-bottom:
+    1px solid var(--border);
+
+  border-radius:
+    0 0 var(--radius) var(--radius);
+
+  box-shadow:
+    0 20px 50px rgba(0,0,0,0.22);
+
+  overflow: hidden;
+}
+
+
+/* subtle decorative diagonal */
+
+h2 + p::after {
+  content: "";
+
+  position: absolute;
+
+  right: -80px;
+  bottom: -80px;
+
+  width: 250px;
+  height: 150px;
+
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      rgba(112,40,255,0.08) 0,
+      rgba(112,40,255,0.08) 2px,
+      transparent 2px,
+      transparent 13px
+    );
+
+  transform: rotate(-8deg);
+
+  pointer-events: none;
+}
+
+
+/* =========================================================
+   TABLE CONTAINER
+   ========================================================= */
 
 table {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.9rem;
+
+  margin: 0;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(16,11,32,0.98),
+      rgba(8,6,17,0.98)
+    );
+
+  border-left:
+    1px solid var(--border);
+
+  border-right:
+    1px solid var(--border);
+
+  border-bottom:
+    1px solid var(--border);
+
+  border-radius:
+    0 0 var(--radius) var(--radius);
+
+  overflow: hidden;
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,0.28);
 }
 
-th, td {
+
+/* =========================================================
+   TABLE HEADER
+   ========================================================= */
+
+thead {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(112,40,255,0.18),
+      rgba(112,40,255,0.05)
+    );
+}
+
+thead th {
+  padding: 16px 18px;
+
+  color: #8f899e;
+
+  font-size: 11px;
+  font-weight: 800;
+
+  letter-spacing: 1.3px;
+
   text-align: left;
-  padding: 0.5rem 0.6rem;
-  border-bottom: 1px solid var(--border);
-}
-
-th {
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.8rem;
   text-transform: uppercase;
+
+  border-bottom:
+    1px solid rgba(112,40,255,0.25);
 }
 
-tr.rank-1 td:first-child { color: var(--gold); font-weight: 700; }
-tr.rank-2 td:first-child { color: var(--silver); font-weight: 700; }
-tr.rank-3 td:first-child { color: var(--bronze); font-weight: 700; }
 
-.movement-up { color: #2e9e44; }
-.movement-down { color: #c53434; }
-.movement-same { color: var(--muted); }
+/* =========================================================
+   TABLE ROWS
+   ========================================================= */
 
-.empty-state {
-  color: var(--muted);
-  font-style: italic;
+tbody tr {
+  position: relative;
+
+  transition:
+    background 180ms ease,
+    transform 180ms ease;
+}
+
+
+/* row separators */
+
+tbody td {
+  padding: 20px 18px;
+
+  color: var(--text);
+
+  font-size: 15px;
+
+  border-bottom:
+    1px solid rgba(255,255,255,0.055);
+
+  transition:
+    color 180ms ease,
+    background 180ms ease;
+}
+
+
+/* remove final line */
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+/* =========================================================
+   TABLE HOVER
+   ========================================================= */
+
+tbody tr:hover {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(112,40,255,0.13),
+      rgba(140,255,0,0.035),
+      transparent
+    );
+}
+
+tbody tr:hover td {
+  color: #ffffff;
+}
+
+
+/* green indicator on hover */
+
+tbody tr td:first-child {
+  position: relative;
+}
+
+tbody tr:hover td:first-child::before {
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+  top: 10px;
+  bottom: 10px;
+
+  width: 3px;
+
+  background: var(--green);
+
+  box-shadow:
+    0 0 10px rgba(140,255,0,0.6);
+}
+
+
+/* =========================================================
+   MANAGER NAME
+   ========================================================= */
+
+tbody td:first-child {
+  color: #f4f1f8;
+
+  font-weight: 700;
+}
+
+
+/* =========================================================
+   TEAM NAME
+   ========================================================= */
+
+tbody td:nth-child(2) {
+  color: #b7b1c3;
+
+  font-weight: 600;
+}
+
+
+/* =========================================================
+   JOINED DATE
+   ========================================================= */
+
+tbody td:last-child {
+  color: #777184;
+
+  font-size: 13px;
+
+  font-variant-numeric: tabular-nums;
+}
+
+
+/* =========================================================
+   FIRST MANAGER ROW
+   Give first row subtle leader treatment
+   ========================================================= */
+
+tbody tr:first-child {
+  background:
+    linear-gradient(
+      90deg,
+      rgba(140,255,0,0.045),
+      transparent 55%
+    );
+}
+
+tbody tr:first-child td:first-child {
+  color: var(--green);
+}
+
+
+/* =========================================================
+   MOTW LEADERBOARD
+   ========================================================= */
+
+/* Give the final empty section more presence */
+
+h2:last-of-type + p {
+  min-height: 150px;
+
+  justify-content: center;
+
+  text-align: center;
+
+  font-size: 15px;
+
+  background:
+    radial-gradient(
+      circle at center,
+      rgba(112,40,255,0.09),
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(16,11,32,0.96),
+      rgba(8,6,17,0.96)
+    );
+}
+
+
+/* =========================================================
+   EMPTY STATE TYPOGRAPHY
+   ========================================================= */
+
+p em {
+  color: #817b8d;
+}
+
+
+/* =========================================================
+   SECTION SPACING
+   ========================================================= */
+
+/* Don't let sections feel like one long document */
+
+h2 + p + h2 {
+  margin-top: 42px;
+}
+
+
+/* =========================================================
+   DESKTOP TABLE DEPTH
+   ========================================================= */
+
+@media (min-width: 900px) {
+
+  table tbody tr {
+    height: 64px;
+  }
+
+  table tbody tr:hover {
+    transform: translateX(3px);
+  }
+}
+
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 700px) {
+
+  body > div,
+  main,
+  .container {
+    width: calc(100% - 28px);
+
+    padding-top: 32px;
+    padding-bottom: 60px;
+  }
+
+  h1 {
+    font-size: 38px;
+    letter-spacing: -2px;
+  }
+
+  h1 + p {
+    margin-bottom: 38px;
+
+    font-size: 14px;
+  }
+
+  h2 {
+    margin-top: 32px;
+
+    padding: 15px;
+
+    font-size: 16px;
+  }
+
+  h2 + p {
+    min-height: 100px;
+
+    padding: 22px 18px;
+  }
+
+  table {
+    display: block;
+
+    overflow-x: auto;
+
+    white-space: nowrap;
+  }
+
+  thead th,
+  tbody td {
+    padding: 15px 14px;
+  }
+
+  tbody td {
+    font-size: 14px;
+  }
+}
+
+
+/* =========================================================
+   VERY SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 450px) {
+
+  body > div,
+  main,
+  .container {
+    width: calc(100% - 20px);
+
+    padding-top: 25px;
+  }
+
+  h1 {
+    font-size: 32px;
+  }
+
+  h1 + p {
+    font-size: 13px;
+  }
+
+  h2 {
+    font-size: 15px;
+  }
+}
+
+
+/* =========================================================
+   SCROLLBAR
+   ========================================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #07050f;
+}
+
+::-webkit-scrollbar-thumb {
+  background:
+    linear-gradient(
+      180deg,
+      var(--purple),
+      var(--green)
+    );
+
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--green);
+}
+
+
+/* =========================================================
+   TEXT SELECTION
+   ========================================================= */
+
+::selection {
+  color: #08050f;
+  background: var(--green);
+}
+
+
+/* =========================================================
+   APP-SPECIFIC COMPATIBILITY
+   Classes used by page.tsx that the redesign above doesn't
+   cover directly (banner, rank highlights, movement arrows)
+   ========================================================= */
+
+section {
+  margin-bottom: 0;
 }
 
 .banner {
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1rem;
+  margin: 0;
+  padding: 30px;
+
+  display: flex;
+  align-items: center;
+
+  color: var(--white);
+  font-size: 15px;
+  font-weight: 600;
+
+  background:
+    radial-gradient(
+      circle at 0% 0%,
+      rgba(140,255,0,0.12),
+      transparent 60%
+    ),
+    linear-gradient(
+      135deg,
+      rgba(16,11,32,0.96),
+      rgba(9,7,18,0.96)
+    );
+
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+
+  box-shadow: 0 20px 50px rgba(0,0,0,0.22);
 }
+
+.movement-up { color: var(--green); font-weight: 800; }
+.movement-down { color: var(--red); font-weight: 800; }
+.movement-same { color: var(--muted); }
+
+tr.rank-1 td:first-child { color: #ffd700 !important; }
+tr.rank-2 td:first-child { color: #d7d7e0 !important; }
+tr.rank-3 td:first-child { color: #e0a35c !important; }
