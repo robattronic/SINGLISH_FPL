@@ -764,3 +764,24 @@ section {
 tr.rank-1 td:first-child { color: #ffd700 !important; }
 tr.rank-2 td:first-child { color: #d7d7e0 !important; }
 tr.rank-3 td:first-child { color: #e0a35c !important; }
+
+.site-logo {
+  position: fixed;
+  top: 24px;
+  right: max(24px, calc((100% - 1180px) / 2 + 24px));
+
+  width: 88px;
+  height: auto;
+
+  z-index: 10;
+
+  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.4));
+}
+
+@media (max-width: 700px) {
+  .site-logo {
+    top: 16px;
+    right: 16px;
+    width: 56px;
+  }
+}

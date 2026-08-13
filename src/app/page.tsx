@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { getAllLeagueStandings } from "@/lib/fpl-client";
 import {
   getAllGwScores,
@@ -45,6 +46,14 @@ export default async function DashboardPage() {
 
   return (
     <main>
+      <Image
+        src="/logo.png"
+        alt="Singlish FPL"
+        width={573}
+        height={687}
+        className="site-logo"
+        priority
+      />
       <h1>{standings?.league.name ?? "FPL League Tracker"}</h1>
       <p className="subtitle">
         {latestGw === null
