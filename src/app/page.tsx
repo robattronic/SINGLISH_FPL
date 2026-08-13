@@ -69,7 +69,34 @@ export default async function DashboardPage() {
       <section>
         <h2>Season Standings</h2>
         {!standings || standings.standings.results.length === 0 ? (
-          <p className="empty-state">No standings yet — league is pre-season or empty.</p>
+          standings && standings.new_entries.results.length > 0 ? (
+            <>
+              <p className="empty-state">
+                League is pre-season — no ranked standings yet, but {standings.new_entries.results.length}{" "}
+                manager{standings.new_entries.results.length === 1 ? "" : "s"} joined so far:
+              </p>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Manager</th>
+                    <th>Team</th>
+                    <th>Joined</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {standings.new_entries.results.map((entry) => (
+                    <tr key={entry.entry}>
+                      <td>{entry.player_first_name} {entry.player_last_name}</td>
+                      <td>{entry.entry_name}</td>
+                      <td>{new Date(entry.joined_time).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </>
+          ) : (
+            <p className="empty-state">No standings yet — league is pre-season or empty.</p>
+          )
         ) : (
           <table>
             <thead>
