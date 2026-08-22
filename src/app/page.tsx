@@ -19,7 +19,15 @@ export const dynamic = "force-dynamic";
 // not built out yet.
 export default async function DashboardPage() {
   const leagueId = getLeagueId();
-  const standings = await getAllLeagueStandings(leagueId);
+  let debugInfo = "";
+  let standings;
+  try {
+    standings = await getAllLeagueStandings(leagueId);
+    debugInfo = `leagueId=${leagueId} standings=${standings ? "OK" : "NULL"}`;
+  } catch (err) {
+    debugInfo = `leagueId=${leagueId} threw: ${err instanceof Error ? err.message : String(err)}`;
+    standings = null;
+  }
   const latestGw = await getLatestFinishedGameweekId();
   const managers = await getAllManagers();
   const managerByEntryId = new Map(managers.map((m) => [m.fpl_entry_id, m]));
@@ -55,6 +63,7 @@ export default async function DashboardPage() {
         priority
       />
       <h1>{standings?.league.name ?? "FPL League Tracker"}</h1>
+      <p style={{ color: "red", fontSize: 12 }}>DEBUG: {debugInfo}</p>
       <p className="subtitle">
         {latestGw === null
           ? "Season hasn't started yet — standings below are live, but MOTW/chip history will populate once GW1 finishes."
