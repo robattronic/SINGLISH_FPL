@@ -1,7 +1,9 @@
 import type {
   BootstrapStatic,
   CupStatus,
+  EventLiveResponse,
   LeagueStandingsResponse,
+  ManagerBasicInfo,
   ManagerHistoryResponse,
   ManagerPicksResponse,
 } from "./types";
@@ -24,7 +26,9 @@ export function sleep(ms: number): Promise<void> {
 // recorded in the DB — this function itself does no caching, it just talks
 // to the API. Failures degrade to null rather than throwing, since FPL
 // occasionally reshapes responses off-season (PRD Section 4 "Known risk").
-async function fetchJson<T>(path: string): Promise<T | null> {
+const MAX_ATTEMPTS = 3;
+
+async function fetchJson<T>(path: string, attempt = 1): Promise<T | null> {
   try {
     // Explicit no-store: relying on the page's `dynamic = "force-dynamic"`
     // to propagate down into this fetch isn't reliable on Vercel — it was
@@ -32,12 +36,20 @@ async function fetchJson<T>(path: string): Promise<T | null> {
     // route config, so this is pinned directly on the fetch call instead.
     const res = await fetch(`${BASE_URL}${path}`, { headers: HEADERS, cache: "no-store" });
     if (!res.ok) {
-      console.warn(`[fpl-client] ${path} -> HTTP ${res.status}`);
+      console.warn(`[fpl-client] ${path} -> HTTP ${res.status} (attempt ${attempt})`);
+      if (attempt < MAX_ATTEMPTS) {
+        await sleep(300 * attempt);
+        return fetchJson<T>(path, attempt + 1);
+      }
       return null;
     }
     return (await res.json()) as T;
   } catch (err) {
-    console.warn(`[fpl-client] ${path} failed:`, err);
+    console.warn(`[fpl-client] ${path} failed (attempt ${attempt}):`, err);
+    if (attempt < MAX_ATTEMPTS) {
+      await sleep(300 * attempt);
+      return fetchJson<T>(path, attempt + 1);
+    }
     return null;
   }
 }
@@ -94,4 +106,12 @@ export function getManagerPicks(
 
 export function getManagerCup(entryId: number): Promise<CupStatus | null> {
   return fetchJson<CupStatus>(`/entry/${entryId}/cup/`);
+}
+
+export function getEventLive(gameweek: number): Promise<EventLiveResponse | null> {
+  return fetchJson<EventLiveResponse>(`/event/${gameweek}/live/`);
+}
+
+export function getManagerBasicInfo(entryId: number): Promise<ManagerBasicInfo | null> {
+  return fetchJson<ManagerBasicInfo>(`/entry/${entryId}/`);
 }

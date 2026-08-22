@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { getAllLeagueStandings } from "@/lib/fpl-client";
 import {
   getAllGwScores,
@@ -19,15 +20,7 @@ export const dynamic = "force-dynamic";
 // not built out yet.
 export default async function DashboardPage() {
   const leagueId = getLeagueId();
-  let debugInfo = "";
-  let standings;
-  try {
-    standings = await getAllLeagueStandings(leagueId);
-    debugInfo = `leagueId=${leagueId} standings=${standings ? "OK" : "NULL"}`;
-  } catch (err) {
-    debugInfo = `leagueId=${leagueId} threw: ${err instanceof Error ? err.message : String(err)}`;
-    standings = null;
-  }
+  const standings = await getAllLeagueStandings(leagueId);
   const latestGw = await getLatestFinishedGameweekId();
   const managers = await getAllManagers();
   const managerByEntryId = new Map(managers.map((m) => [m.fpl_entry_id, m]));
@@ -63,7 +56,6 @@ export default async function DashboardPage() {
         priority
       />
       <h1>{standings?.league.name ?? "FPL League Tracker"}</h1>
-      <p style={{ color: "red", fontSize: 12 }}>DEBUG: {debugInfo}</p>
       <p className="subtitle">
         {latestGw === null
           ? "Season hasn't started yet — standings below are live, but MOTW/chip history will populate once GW1 finishes."
@@ -104,7 +96,11 @@ export default async function DashboardPage() {
                 <tbody>
                   {standings.new_entries.results.map((entry) => (
                     <tr key={entry.entry}>
-                      <td>{entry.player_first_name} {entry.player_last_name}</td>
+                      <td>
+                        <Link href={`/manager/${entry.entry}`}>
+                          {entry.player_first_name} {entry.player_last_name}
+                        </Link>
+                      </td>
                       <td>{entry.entry_name}</td>
                       <td>{new Date(entry.joined_time).toLocaleDateString()}</td>
                     </tr>
@@ -133,7 +129,9 @@ export default async function DashboardPage() {
                 return (
                   <tr key={entry.entry} className={entry.rank <= 3 ? `rank-${entry.rank}` : undefined}>
                     <td>{entry.rank}</td>
-                    <td>{entry.player_name}</td>
+                    <td>
+                      <Link href={`/manager/${entry.entry}`}>{entry.player_name}</Link>
+                    </td>
                     <td>{entry.entry_name}</td>
                     <td>{entry.event_total}</td>
                     <td>{entry.total}</td>
