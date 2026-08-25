@@ -27,6 +27,7 @@ export default async function DashboardPage() {
   const managerById = new Map(managers.map((m) => [m.id, m]));
 
   const leaderboard = buildMotwLeaderboard(await getAllGwScores());
+  const motwWinnerIds = new Set(leaderboard.map((e) => e.managerId));
 
   const currentWeekWinners =
     latestGw === null ? [] : getWeeklyMotwWinners(await getGwScoresForGameweek(latestGw));
@@ -153,11 +154,22 @@ export default async function DashboardPage() {
             <tbody>
               {standings.standings.results.map((entry) => {
                 const movement = rankMovements.get(entry.entry) ?? "unknown";
+                const manager = managerByEntryId.get(entry.entry);
+                const hasMotw = manager && motwWinnerIds.has(manager.id);
                 return (
                   <tr key={entry.entry} className={entry.rank <= 3 ? `rank-${entry.rank}` : undefined}>
                     <td>{entry.rank}</td>
                     <td>
                       <Link href={`/manager/${entry.entry}`}>{entry.player_name}</Link>
+                      {hasMotw && (
+                        <Image
+                          src="/motw-badge.png"
+                          alt="MOTW winner"
+                          width={20}
+                          height={20}
+                          className="motw-badge"
+                        />
+                      )}
                     </td>
                     <td>{entry.entry_name}</td>
                     <td>{entry.event_total}</td>
@@ -189,7 +201,16 @@ export default async function DashboardPage() {
             <tbody>
               {leaderboard.map((entry) => (
                 <tr key={entry.managerId}>
-                  <td>{managerById.get(entry.managerId)?.name ?? "Unknown"}</td>
+                  <td>
+                    {managerById.get(entry.managerId)?.name ?? "Unknown"}
+                    <Image
+                      src="/motw-badge.png"
+                      alt="MOTW winner"
+                      width={20}
+                      height={20}
+                      className="motw-badge"
+                    />
+                  </td>
                   <td>{entry.wins}</td>
                   <td>{entry.gameweeksWon.map((gw) => `GW${gw}`).join(", ")}</td>
                 </tr>

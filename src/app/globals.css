@@ -751,6 +751,16 @@ tbody td a:hover {
   color: var(--green);
 }
 
+.motw-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 6px;
+  margin-top: -2px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
 
 /* =========================================================
    APP-SPECIFIC COMPATIBILITY
