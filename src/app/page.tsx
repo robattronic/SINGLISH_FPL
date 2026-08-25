@@ -31,6 +31,27 @@ export default async function DashboardPage() {
   const currentWeekWinners =
     latestGw === null ? [] : getWeeklyMotwWinners(await getGwScoresForGameweek(latestGw));
 
+  // Live/provisional leader for the in-progress gameweek: FPL only flips
+  // an event's `finished` flag ~1-2 days after the last match (bonus
+  // points confirmation), so relying solely on getLatestFinishedGameweekId
+  // would leave this section empty for a day+ after matches have actually
+  // finished. This is explicitly unofficial and separate from the
+  // permanent MOTW tally, which only ever locks in confirmed gameweeks.
+  const liveLeaders =
+    latestGw === null && standings && standings.standings.results.length > 0
+      ? getWeeklyMotwWinners(
+          standings.standings.results.map((e) => ({
+            manager_id: e.entry,
+            gameweek_id: 0,
+            points: e.event_total,
+          }))
+        )
+      : [];
+  const liveLeaderNames = liveLeaders.map(
+    (entryId) => standings?.standings.results.find((e) => e.entry === entryId)?.player_name ?? "Unknown"
+  );
+  const liveLeaderPoints = standings?.standings.results.find((e) => e.entry === liveLeaders[0])?.event_total;
+
   const rankMovements = new Map<number, "up" | "down" | "same" | "unknown">();
   if (standings && latestGw !== null) {
     for (const entry of standings.standings.results) {
@@ -64,15 +85,21 @@ export default async function DashboardPage() {
 
       <section>
         <h2>Current Gameweek: Manager of the Week</h2>
-        {currentWeekWinners.length === 0 ? (
-          <p className="empty-state">No finished gameweek yet.</p>
-        ) : (
+        {currentWeekWinners.length > 0 ? (
           <div className="banner">
             {currentWeekWinners
               .map((id) => managerById.get(id)?.name ?? "Unknown")
               .join(" & ")}{" "}
             {currentWeekWinners.length > 1 ? "tied for" : "is"} top scorer in GW{latestGw}
           </div>
+        ) : liveLeaders.length > 0 ? (
+          <div className="banner">
+            <strong>Live (unofficial):</strong> {liveLeaderNames.join(" & ")}{" "}
+            {liveLeaderNames.length > 1 ? "are tied for" : "leads with"} {liveLeaderPoints} pts —
+            official once FPL confirms bonus points for this gameweek.
+          </div>
+        ) : (
+          <p className="empty-state">No finished gameweek yet.</p>
         )}
       </section>
 
