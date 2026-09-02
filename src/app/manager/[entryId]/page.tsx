@@ -8,9 +8,10 @@ import {
 
 export const dynamic = "force-dynamic";
 
-// Squad view for a single manager/gameweek — like the FPL app's "Points"
-// screen. Uses the FPL entry id directly (not our local managers.id) so
-// this works even for a manager our sync hasn't picked up yet.
+// Squad view for a single manager/gameweek — a pitch/formation layout like
+// the FPL app's own team view. Uses the FPL entry id directly (not our
+// local managers.id) so this works even for a manager our sync hasn't
+// picked up yet.
 export default async function ManagerSquadPage({
   params,
   searchParams,
@@ -73,8 +74,27 @@ export default async function ManagerSquadPage({
 
   const starters = rows.filter((r) => r.position <= 11);
   const bench = rows.filter((r) => r.position > 11);
-
   const squadTotal = starters.reduce((sum, r) => sum + r.appliedPoints, 0);
+
+  // Pitch rows, attack (top) to defence (bottom) — matches the FPL app's
+  // own team-view orientation.
+  const gk = starters.filter((r) => r.positionLabel === "GKP");
+  const def = starters.filter((r) => r.positionLabel === "DEF");
+  const mid = starters.filter((r) => r.positionLabel === "MID");
+  const fwd = starters.filter((r) => r.positionLabel === "FWD");
+  const formation = `${def.length}-${mid.length}-${fwd.length}`;
+
+  const renderPlayer = (r: (typeof rows)[number]) => (
+    <div className="player-card" key={r.element}>
+      {(r.is_captain || r.is_vice_captain) && (
+        <span className="armband">{r.is_captain ? "C" : "VC"}</span>
+      )}
+      <div className="shirt" />
+      <div className="player-points">{r.appliedPoints}</div>
+      <div className="player-name">{r.name}</div>
+      <div className="player-team">{r.team}</div>
+    </div>
+  );
 
   return (
     <main>
@@ -87,54 +107,29 @@ export default async function ManagerSquadPage({
       </p>
 
       <section>
-        <h2>Starting XI — {squadTotal} pts</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Team</th>
-              <th>Pos</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {starters.map((r) => (
-              <tr key={r.element}>
-                <td>
-                  {r.name}
-                  {r.is_captain ? " (C)" : r.is_vice_captain ? " (VC)" : ""}
-                </td>
-                <td>{r.team}</td>
-                <td>{r.positionLabel}</td>
-                <td>{r.appliedPoints}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <h2>
+          Starting XI — {squadTotal} pts <span className="formation-tag">{formation}</span>
+        </h2>
+        <div className="pitch">
+          <div className="pitch-row">{fwd.map(renderPlayer)}</div>
+          <div className="pitch-row">{mid.map(renderPlayer)}</div>
+          <div className="pitch-row">{def.map(renderPlayer)}</div>
+          <div className="pitch-row">{gk.map(renderPlayer)}</div>
+        </div>
       </section>
 
       <section>
         <h2>Bench</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Player</th>
-              <th>Team</th>
-              <th>Pos</th>
-              <th>Points</th>
-            </tr>
-          </thead>
-          <tbody>
-            {bench.map((r) => (
-              <tr key={r.element}>
-                <td>{r.name}</td>
-                <td>{r.team}</td>
-                <td>{r.positionLabel}</td>
-                <td>{r.rawPoints}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="bench-strip">
+          {bench.map((r) => (
+            <div className="player-card player-card-bench" key={r.element}>
+              <div className="shirt" />
+              <div className="player-points">{r.rawPoints}</div>
+              <div className="player-name">{r.name}</div>
+              <div className="player-team">{r.team}</div>
+            </div>
+          ))}
+        </div>
       </section>
     </main>
   );

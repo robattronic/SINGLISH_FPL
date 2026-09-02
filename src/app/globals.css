@@ -843,3 +843,205 @@ main {
     width: 56px;
   }
 }
+
+
+/* =========================================================
+   MANAGER SQUAD — PITCH / FORMATION VIEW
+   ========================================================= */
+
+.formation-tag {
+  display: inline-block;
+  margin-left: 10px;
+
+  padding: 3px 10px;
+  border-radius: 999px;
+
+  color: var(--green);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+
+  background: rgba(140, 255, 0, 0.12);
+  border: 1px solid rgba(140, 255, 0, 0.3);
+
+  vertical-align: middle;
+  text-transform: none;
+}
+
+.pitch {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 22px;
+
+  padding: 28px 12px;
+  min-height: 480px;
+
+  position: relative;
+  overflow: hidden;
+
+  background:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(255,255,255,0.035) 0,
+      rgba(255,255,255,0.035) 12.5%,
+      transparent 12.5%,
+      transparent 25%
+    ),
+    linear-gradient(180deg, #0f3d0a, #0a2a08 60%, #082206);
+
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+
+  box-shadow: 0 25px 70px rgba(0,0,0,0.28);
+}
+
+/* centre circle, purely decorative */
+.pitch::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  transform: translate(-50%, -50%);
+  border: 2px solid rgba(255,255,255,0.12);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pitch-row {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+  z-index: 1;
+}
+
+.player-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 78px;
+  text-align: center;
+}
+
+.shirt {
+  width: 34px;
+  height: 34px;
+  margin-bottom: 4px;
+
+  background: linear-gradient(160deg, var(--purple-light), var(--purple));
+  border: 2px solid rgba(255,255,255,0.5);
+  border-radius: 8px 8px 4px 4px;
+
+  box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+}
+
+.armband {
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  z-index: 2;
+
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: var(--green);
+  color: #08050f;
+  font-size: 9px;
+  font-weight: 900;
+
+  box-shadow: 0 0 8px rgba(140,255,0,0.6);
+}
+
+.player-points {
+  padding: 1px 8px;
+  border-radius: 999px;
+
+  background: rgba(0,0,0,0.55);
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 800;
+
+  margin-bottom: 3px;
+}
+
+.player-name {
+  color: var(--white);
+  font-size: 12px;
+  font-weight: 700;
+
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  text-shadow: 0 1px 4px rgba(0,0,0,0.7);
+}
+
+.player-team {
+  color: rgba(255,255,255,0.65);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bench-strip {
+  display: flex;
+  gap: 18px;
+  overflow-x: auto;
+
+  padding: 24px 20px;
+
+  background:
+    linear-gradient(
+      135deg,
+      rgba(16,11,32,0.98),
+      rgba(8,6,17,0.98)
+    );
+
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-radius: 0 0 var(--radius) var(--radius);
+
+  box-shadow: 0 25px 70px rgba(0,0,0,0.28);
+}
+
+.player-card-bench {
+  flex-shrink: 0;
+  opacity: 0.75;
+}
+
+.player-card-bench .shirt {
+  background: linear-gradient(160deg, #5a5568, #3a3644);
+}
+
+@media (max-width: 700px) {
+  .pitch {
+    min-height: 400px;
+    padding: 20px 4px;
+    gap: 14px;
+  }
+  .player-card {
+    width: 60px;
+  }
+  .shirt {
+    width: 28px;
+    height: 28px;
+  }
+  .player-name {
+    font-size: 10.5px;
+  }
+}
