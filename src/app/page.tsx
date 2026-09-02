@@ -27,7 +27,6 @@ export default async function DashboardPage() {
   const managerById = new Map(managers.map((m) => [m.id, m]));
 
   const leaderboard = buildMotwLeaderboard(await getAllGwScores());
-  const motwWinnerIds = new Set(leaderboard.map((e) => e.managerId));
 
   const currentWeekWinners =
     latestGw === null ? [] : getWeeklyMotwWinners(await getGwScoresForGameweek(latestGw));
@@ -162,7 +161,10 @@ export default async function DashboardPage() {
               {standings.standings.results.map((entry) => {
                 const movement = rankMovements.get(entry.entry) ?? "unknown";
                 const manager = managerByEntryId.get(entry.entry);
-                const hasMotw = manager && motwWinnerIds.has(manager.id);
+                // Only the *current* gameweek's winner(s) get the badge here —
+                // the full season history badge belongs on the MOTW
+                // Leaderboard below, not on every past winner in Standings.
+                const hasMotw = manager && currentWeekWinners.includes(manager.id);
                 return (
                   <tr key={entry.entry} className={entry.rank <= 3 ? `rank-${entry.rank}` : undefined}>
                     <td>{entry.rank}</td>
