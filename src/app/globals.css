@@ -761,6 +761,16 @@ tbody td a:hover {
   object-fit: contain;
 }
 
+.motw-badge-lg {
+  width: 40px;
+  height: 40px;
+  margin-left: 0;
+  margin-right: 14px;
+  margin-top: 0;
+  flex-shrink: 0;
+  filter: drop-shadow(0 4px 10px rgba(140, 255, 0, 0.35));
+}
+
 
 /* =========================================================
    APP-SPECIFIC COMPATIBILITY

@@ -88,6 +88,13 @@ export default async function DashboardPage() {
         <h2>Current Gameweek: Manager of the Week</h2>
         {currentWeekWinners.length > 0 ? (
           <div className="banner">
+            <Image
+              src="/motw-badge.png"
+              alt="MOTW winner"
+              width={40}
+              height={40}
+              className="motw-badge motw-badge-lg"
+            />
             {currentWeekWinners
               .map((id) => managerById.get(id)?.name ?? "Unknown")
               .join(" & ")}{" "}
