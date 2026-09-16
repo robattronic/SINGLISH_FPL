@@ -3,6 +3,32 @@
    CSS-ONLY VISUAL REDESIGN
    ========================================================= */
 
+/* Expandable manager squads */
+.expandable-standings { border: 1px solid var(--border); border-radius: 0 0 14px 14px; overflow: hidden; background: var(--panel); }
+.standings-head,.standings-summary { display:grid; grid-template-columns: 48px minmax(0,1fr) 70px 70px 65px; align-items:center; gap:12px; padding:18px 22px; }
+.standings-head { color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1px; }
+.standings-summary { width:100%; border:0; border-top:1px solid var(--border-soft); color:var(--text); background:transparent; text-align:left; cursor:pointer; font:inherit; }
+.standings-summary:hover,.standings-summary[aria-expanded=true] { background:rgba(112,40,255,.13); }
+.summary-manager { min-width:0; }.summary-manager strong,.summary-manager small { display:block; overflow-wrap:anywhere; }.summary-manager small { color:var(--muted); margin-top:5px; }
+.summary-rank { font-weight:800; }.rank-1 .summary-rank {color:#ffd700}.rank-2 .summary-rank {color:#d7d7e0}.rank-3 .summary-rank {color:#e0a35c}
+.expand-arrow { float:right; color:var(--green); }
+.manager-panel { padding:24px; border-top:1px solid var(--border); background:#0d091b; white-space:normal; }
+.manager-panel button,.manager-panel select { font:inherit; color:var(--white); background:var(--panel-light); border:1px solid var(--border); border-radius:8px; padding:8px 12px; cursor:pointer; }
+.manager-panel button:focus-visible,.manager-panel select:focus-visible,.standings-summary:focus-visible { outline:2px solid var(--green); outline-offset:-3px; }
+.panel-toolbar { display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:16px; font-size:13px; }.panel-toolbar a {margin-left:auto}
+.panel-switch {display:flex; gap:5px}.panel-switch button[aria-pressed=true] {background:var(--purple);border-color:var(--purple-light)}
+.panel-note {color:#aaa4b8; font-size:12px; line-height:1.6; margin:8px 0 16px;}
+.mini-pitch { max-width:720px; margin:auto; border:1px solid #3b7053; border-radius:12px; padding:22px 8px; background:repeating-linear-gradient(0deg,#103b2d 0,#103b2d 70px,#144332 70px,#144332 140px); }
+.mini-pitch-row {display:flex; justify-content:space-evenly; gap:4px; margin-bottom:18px}.mini-pitch-row:last-child {margin-bottom:0}
+.mini-player {width:100px; min-width:0; text-align:center; font-size:12px; position:relative;}.mini-player strong {display:block; overflow-wrap:anywhere; line-height:1.25;margin:5px 0}.mini-player>span {display:block;background:#e5f6e9;color:#103b2d;border-radius:4px;font-weight:700;padding:3px}
+.mini-shirt {width:40px;height:38px;display:grid;place-items:center;margin:auto;background:#d5c4ff;color:#261047;font-weight:900;font-size:9px;clip-path:polygon(25% 0,38% 7%,62% 7%,75% 0,100% 20%,85% 43%,75% 35%,75% 100%,25% 100%,25% 35%,15% 43%,0 20%);}
+.mini-bench {display:flex;justify-content:space-evenly;gap:8px;padding:18px 8px;background:var(--panel-light);border-radius:10px;max-width:720px;margin:auto}
+.manager-panel h3 {font-size:14px;margin:22px 0 12px}.panel-info-grid {display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.panel-chips {display:grid;grid-template-columns:1fr 1fr;gap:8px}.panel-chip {border:1px solid var(--border-soft);border-radius:8px;padding:10px;display:grid;gap:5px;font-size:12px}.panel-chip small {color:var(--muted)}.panel-chip.used {border-color:var(--purple-light)}.panel-chip.used span {color:var(--green)}
+.ft-number {font-size:26px;color:var(--green)}.panel-transfers {padding:0;list-style:none;max-height:250px;overflow:auto}.panel-transfers li {display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border-soft);font-size:13px}.panel-transfers small {white-space:nowrap;color:var(--muted)}.panel-transfers del {color:#ed91ab;text-decoration:none}.panel-transfers strong {color:var(--green)}
+.panel-list>div {display:flex;justify-content:space-between;padding:10px;border-bottom:1px solid var(--border-soft);font-size:13px}.panel-list small {display:block;color:var(--muted);margin-top:4px}
+@media(max-width:700px) {.standings-head,.standings-summary {grid-template-columns:28px minmax(0,1fr) 38px 42px 36px;gap:7px;padding:14px 10px;font-size:12px}.standings-head {font-size:9px;letter-spacing:0}.manager-panel {padding:14px 10px}.panel-info-grid {grid-template-columns:1fr;gap:4px}.mini-player {font-size:10px}.mini-shirt {width:32px;height:32px}.mini-pitch-row {margin-bottom:22px}.panel-toolbar {gap:10px}.panel-toolbar a {margin-left:0}}
+
 :root {
   --bg: #07050f;
   --bg-soft: #0d091b;

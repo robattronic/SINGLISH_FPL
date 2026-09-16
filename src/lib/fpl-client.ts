@@ -28,13 +28,13 @@ export function sleep(ms: number): Promise<void> {
 // occasionally reshapes responses off-season (PRD Section 4 "Known risk").
 const MAX_ATTEMPTS = 3;
 
-async function fetchJson<T>(path: string, attempt = 1): Promise<T | null> {
+export async function fetchJson<T>(path: string, attempt = 1): Promise<T | null> {
   try {
     // Explicit no-store: relying on the page's `dynamic = "force-dynamic"`
     // to propagate down into this fetch isn't reliable on Vercel — it was
     // observed serving stale FPL data (Vercel Data Cache) despite that
     // route config, so this is pinned directly on the fetch call instead.
-    const res = await fetch(`${BASE_URL}${path}`, { headers: HEADERS, cache: "no-store" });
+    const res = await fetch(`${BASE_URL}${path}`, { headers: HEADERS, cache: "no-store", signal: AbortSignal.timeout(8000) });
     if (!res.ok) {
       console.warn(`[fpl-client] ${path} -> HTTP ${res.status} (attempt ${attempt})`);
       if (attempt < MAX_ATTEMPTS) {

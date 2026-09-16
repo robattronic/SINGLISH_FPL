@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Standings from './components/Standings';
 import { getAllLeagueStandings } from "@/lib/fpl-client";
 import {
   getAllGwScores,
@@ -146,51 +147,9 @@ export default async function DashboardPage() {
             <p className="empty-state">No standings yet — league is pre-season or empty.</p>
           )
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Rank</th>
-                <th>Manager</th>
-                <th>Team</th>
-                <th>GW Pts</th>
-                <th>Total</th>
-                <th>Movement</th>
-              </tr>
-            </thead>
-            <tbody>
-              {standings.standings.results.map((entry) => {
-                const movement = rankMovements.get(entry.entry) ?? "unknown";
-                const manager = managerByEntryId.get(entry.entry);
-                // Only the *current* gameweek's winner(s) get the badge here —
-                // the full season history badge belongs on the MOTW
-                // Leaderboard below, not on every past winner in Standings.
-                const hasMotw = manager && currentWeekWinners.includes(manager.id);
-                return (
-                  <tr key={entry.entry} className={entry.rank <= 3 ? `rank-${entry.rank}` : undefined}>
-                    <td>{entry.rank}</td>
-                    <td>
-                      <Link href={`/manager/${entry.entry}`}>{entry.player_name}</Link>
-                      {hasMotw && (
-                        <Image
-                          src="/motw-badge.png"
-                          alt="MOTW winner"
-                          width={20}
-                          height={20}
-                          className="motw-badge"
-                        />
-                      )}
-                    </td>
-                    <td>{entry.entry_name}</td>
-                    <td>{entry.event_total}</td>
-                    <td>{entry.total}</td>
-                    <td className={`movement-${movement}`}>
-                      {movement === "up" ? "▲" : movement === "down" ? "▼" : movement === "same" ? "—" : "?"}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <Standings entries={standings.standings.results}
+            movements={Object.fromEntries(rankMovements)}
+            winners={managers.filter(m => currentWeekWinners.includes(m.id)).map(m=>m.fpl_entry_id)} />
         )}
       </section>
 
